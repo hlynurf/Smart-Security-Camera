@@ -9,7 +9,7 @@ from email.mime.image import MIMEImage
 fromEmail = 'jon.hesthus@gmail.com'
 # You can generate an app password here to avoid storing your password in plain text
 # https://support.google.com/accounts/answer/185833?hl=en
-fromEmailPassword = os.environ('GMAIL_PASS')
+fromEmailPassword = os.environ['GMAIL_PASS']
 
 # Email you want to send the update to
 toEmail = 'hlynur4@gmail.com'
