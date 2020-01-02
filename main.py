@@ -55,7 +55,7 @@ def get_temp():
 @basic_auth.required
 def index():
 	temparature = get_temp()
-	return render_template('index.html', temparature=)
+	return render_template('index.html', temparature=temparature)
 
 
 def gen(camera):
