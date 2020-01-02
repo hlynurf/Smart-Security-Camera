@@ -10,7 +10,7 @@ import threading
 
 email_update_interval = 600  # sends an email only once in this time interval
 video_camera = VideoCamera(flip=True)  # creates a camera object, flip vertically
-object_classifier = cv2.CascadeClassifier("models/fullbody_recognition_model.xml") # an opencv classifier
+object_classifier = cv2.CascadeClassifier("models/facial_recognition_model.xml")  # an opencv classifier
 
 # App Globals (do not edit)
 app = Flask(__name__)
@@ -20,6 +20,9 @@ app.config['BASIC_AUTH_FORCE'] = True
 
 basic_auth = BasicAuth(app)
 last_epoch = 0
+
+os.system('modprobe w1-gpio')
+os.system('modprobe w1-therm')
 
 
 def check_for_objects():
@@ -36,10 +39,23 @@ def check_for_objects():
 			print("Error sending email: ", sys.exc_info()[0])
 
 
+def get_temp():
+	temp_sensor = '/sys/bus/w1/devices/28-011452c4fbaa/w1_slave'
+	with open(temp_sensor, 'r') as file:
+		lines = file.readlines()
+		equals_pos = lines[1].find('t=')
+		if equals_pos != -1:
+			temp_string = lines[1][equals_pos + 2:]
+			temp_c = float(temp_string) / 1000.0
+			return temp_c
+		return 100.0
+
+
 @app.route('/')
 @basic_auth.required
 def index():
-	return render_template('index.html')
+	temparature = get_temp()
+	return render_template('index.html', temparature=)
 
 
 def gen(camera):
@@ -47,6 +63,7 @@ def gen(camera):
 		frame = camera.get_frame()
 		yield (b'--frame\r\n'
 			   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+
 
 @app.route('/video_feed')
 def video_feed():
