@@ -21,10 +21,6 @@ app.config['BASIC_AUTH_FORCE'] = True
 basic_auth = BasicAuth(app)
 last_epoch = 0
 
-os.system('modprobe w1-gpio')
-os.system('modprobe w1-therm')
-
-
 def check_for_objects():
 	global last_epoch
 	while True:
