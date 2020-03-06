@@ -3,7 +3,7 @@
 set -e
 
 sudo pip3 install opencv-python 
-sudo apt-get install libcblas-dev
+sudo apt-get install libatlas-base-dev
 sudo apt-get install libhdf5-dev
 sudo apt-get install libhdf5-serial-dev
 sudo apt-get install libatlas-base-dev
